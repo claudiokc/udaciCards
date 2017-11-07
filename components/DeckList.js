@@ -1,19 +1,38 @@
 import React, { Component } from 'react'
-import { View, Text, FlatList } from 'react-native'
+import { View, Text, FlatList, TouchableHighlight } from 'react-native'
 import styled from 'styled-components/native'
+import { connect } from 'react-redux'
+import { getAllDeck } from '../actions/index'
 import { white, blue, gray } from '../helpers/colors'
+import { getDecks, clearAll } from '../utils/api'
 
-const DeckWrapper = styled.View`
+const DeckWrapper = styled.TouchableHighlight`
   background-color: ${white};
   height: 200px;
   padding: 30px 20px;
-  margin: 15px;
+  margin-horizontal: 15;
+  margin-top: 10;
+  margin-bottom: 15;
   border-radius: 2px;
   elevation: 5;
   shadow-color: blue;
   justify-content: center;
   align-items: center;
 `
+const Container = styled.View`
+  background-color: ${white};
+  height: 200;
+  padding-horizontal: 20;
+  padding-vertical: 30;
+  margin-horizontal: 15;
+  margin-top: 10;
+  margin-bottom: 15;
+  border-radius: 2px;
+  elevation: 4;
+  shadow-color: blue;
+  justify-content: center;
+  align-items: center;`
+
 const DeckTitle = styled.Text`
   font-size: 26px;
   text-align: center;
@@ -24,38 +43,64 @@ const DeckCardsCount = styled.Text`
 `
 const Wrapper = styled.View`
   flex: 1;
+  justifyContent = 'center';
+  paddingTop = '5';
   background-color: ${gray};
 `
 
-function ViewWrapper({ children }) {
-  return <Wrapper>{children}</Wrapper>
-}
-
-function Deck({ title, cards }) {
+function Deck({ title, questions, press }) {
   return (
-    <DeckWrapper>
-      <DeckTitle>{title}</DeckTitle>
-      <DeckCardsCount>{cards} cards</DeckCardsCount>
+    <DeckWrapper onPress={press}>
+      <Container>
+        <DeckTitle>{title}</DeckTitle>
+        <DeckCardsCount>{questions.length} cards</DeckCardsCount>
+      </Container>
     </DeckWrapper>
   )
 }
 
 class DeckListView extends Component {
-  state = {
-    decks: [
-      { title: 'React', cards: 5, key: '1' },
-      { title: 'AngularJS', cards: 5, key: '2' },
-      { title: 'Python', cards: 5, key: '4' }
-    ]
+  componentDidMount(){
+    this.fetchDeckList()
   }
 
+  fetchDeckList = () => {
+    getDecks().then(res => {
+      const deckList = JSON.parse(res)
+      const deckArray = []
+      if (deckList !== null) {
+        this.props.getAllDeck(deckList)
+      }
+    })
+  }
+
+  selectDeck = (title) => {
+    console.log('title', title)
+  }
+
+  renderItem = ({ item }) => <Deck {...item} press={() => this.selectDeck(item.title)} />
+
   render() {
+    const { decks } = this.props
+
     return (
-      <ViewWrapper>
-        <FlatList data={this.state.decks} renderItem={({ item }) => <Deck key={item.key} {...item} />}/>
-      </ViewWrapper>
+      <Wrapper>
+        {decks.length > 0 ? (
+          <FlatList data={decks} renderItem={this.renderItem} keyExtractor={item => item.title} />
+        ) : (
+          <View style={{ alignItems: 'center' }}>
+            <Text style={{ fontSize: 26 }}>Your deck is empty.</Text>
+          </View>
+        )}
+      </Wrapper>
     )
   }
 }
 
-export default DeckListView
+function mapStateToProps(decks) {
+  return {
+    decks: Object.values(decks).map(deck => deck)
+  }
+}
+
+export default connect(mapStateToProps, { getAllDeck })(DeckListView)

@@ -2,15 +2,21 @@ import React from 'react'
 import { StyleSheet, View, StatusBar } from 'react-native'
 import { Constants } from 'expo'
 import Tabs from './components/Tabs'
+import { createStore } from 'redux'
+import { Provider } from 'react-redux'
+import reducer from './reducers'
 
-const blue = '#50bdff'
+const lightGray = '#f9f9f9'
+
 
 export default class App extends React.Component {
   render() {
     return (
-      <View style={{ flex: 1 }}>
-        <Tabs />
-      </View>
+      <Provider store={createStore(reducer)}>
+        <View style={{ flex: 1, backgroundColor: lightGray}}>
+          <Tabs />
+        </View>
+      </Provider>
     )
   }
 }
