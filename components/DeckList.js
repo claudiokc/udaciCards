@@ -75,7 +75,7 @@ class DeckListView extends Component {
   }
 
   selectDeck = (title) => {
-    console.log('title', title)
+    this.props.navigation.navigate('SoloDeckView', {id: title})
   }
 
   renderItem = ({ item }) => <Deck {...item} press={() => this.selectDeck(item.title)} />
