@@ -1,3 +1,4 @@
+import React from 'react'
 import { TabNavigator, StackNavigator } from 'react-navigation'
 import { blue, white } from '../helpers/colors'
 import DeckListView from './DeckList'
@@ -5,7 +6,7 @@ import AddDeckView from './AddDeck'
 import SoloDeckView from './SoloDeckView'
 import NewCardView from './NewCardView'
 import QuizView from './QuizView'
-import { FontAwesome } from '@expo/vector-icons'
+import { FontAwesome, MaterialIcons } from '@expo/vector-icons'
 
 const Tabs = TabNavigator(
   {
@@ -23,7 +24,7 @@ const Tabs = TabNavigator(
       navigationOptions: {
         tabBarLabel: 'Add Deck',
         tabBarIcon:({ blue }) => (
-          <FontAwesome name="calendar-plus-o " size={30} color={blue} />
+          <MaterialIcons name="add-box" size={30} color={blue} />
         )
       }
     }

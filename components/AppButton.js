@@ -21,11 +21,11 @@ const ButtonText = styled.Text`
 `
 
 function AppButton(props) {
-  const { press, title } = props
+  const { backgroundColor, borderColor, color, press, title  } = props
   return (
     <View>
       <TouchableOpacity onPress={press}>
-        <Button>
+        <Button style={{backgroundColor}}>
           <ButtonText>{title}</ButtonText>
         </Button>
       </TouchableOpacity>
