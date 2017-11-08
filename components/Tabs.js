@@ -4,6 +4,8 @@ import DeckListView from './DeckList'
 import AddDeckView from './AddDeck'
 import SoloDeckView from './SoloDeckView'
 import NewCardView from './NewCardView'
+import QuizView from './QuizView'
+import { FontAwesome } from '@expo/vector-icons'
 
 const Tabs = TabNavigator(
   {
@@ -48,29 +50,34 @@ const MainNavigator = StackNavigator({
   SoloDeckView: {
     screen: SoloDeckView,
     navigationOptions: ({ navigation }) => ({
-      headerTintColor: white,
-      headerStyle: {
-        backgroundColor: blue
-      },
-      headerTitle: `${navigation.state.params.id}`,
-      headerTitleStyle: {
-        width: 500
-      }
+      ...headerStackStyle,
+      headerTitle: `${navigation.state.params.id}`
     })
   },
   NewCardView: {
     screen: NewCardView,
     navigationOptions: ({ navigation }) => ({
-      headerTintColor: white,
-      headerStyle: {
-        backgroundColor: blue
-      },
-      headerTitle: 'Add Card',
-      headerTitleStyle: {
-        width: 500
-      }
+      ...headerStackStyle,
+      headerTitle: 'Add Card'
+    })
+  },
+  QuizView: {
+    screen: QuizView,
+    navigationOptions: ({ navigation }) => ({
+      ...headerStackStyle,
+      headerTitle: 'Quiz'
     })
   }
 })
+
+const headerStackStyle = {
+  headerTintColor: white,
+  headerStyle: {
+    backgroundColor: blue
+  },
+  headerTitleStyle: {
+    width: 500
+  }
+}
 
 export default MainNavigator

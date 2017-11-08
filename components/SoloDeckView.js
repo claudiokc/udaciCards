@@ -1,84 +1,83 @@
-import React, { Component } from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import React, { PureComponent } from 'react'
+import { View, Text } from 'react-native'
 import AppButton from './AppButton'
-import { getDeck } from '../utils/api'
-import { white, gray, blue } from '../helpers/colors'
+import { white, gray, blue, red } from '../helpers/colors'
 import styled from 'styled-components/native'
+import { connect } from 'react-redux'
 
 const Container = styled.View`
   flex: 1;
 `
 const DeckDetail = styled.View`
-    flex: 0.5;
-    justifyContent: center;
-    alignItems: center;
+  flex: 0.5;
+  justify-content: center;
+  align-items: center;
 `
 const Title = styled.Text`
-    fontSize: 30;
-    textAlign: center;
-    marginBottom: 10;
+  font-size: 30;
+  text-align: center;
+  margin-bottom: 10;
 `
 const Cards = styled.Text`
-    fontSize: 20;
-    color: gray;
+  font-size: 20;
+  color: gray;
 `
 const ButtonAction = styled.View`
-    flex: 0.5;
-    alignItems: center;
+  flex: 0.5;
+  align-items: center;
 `
 
-class SoloDeckView extends Component {
+class SoloDeckView extends PureComponent {
   state = {
-    deck: {},
-    ready: false
-  }
-
-  componentDidMount() {
-    const { id } = this.props.navigation.state.params
-
-    getDeck(id).then(deck => this.setState(() => ({ deck, ready: true })))
-  }
-
-  handleSubmit = () => {
-    console.log('handle submit')
+    error: false
   }
 
   addNewCard = title => {
+    this.setState(() => ({ error: false }))
     this.props.navigation.navigate('NewCardView', { title })
   }
 
+  startQuiz = deck => {
+    if (deck.questions.length === 0) {
+      this.setState(() => ({ error: true }))
+    } else {
+      this.setState(() => ({ error: false }))
+      this.props.navigation.navigate('QuizView', { deck })
+    }
+  }
+
   render() {
-    const { deck, ready } = this.state
+    const { id } = this.props.navigation.state.params
+    const { decks } = this.props
+    const { error } = this.state
 
     return (
       <Container>
-        {ready === true ? (
           <DeckDetail>
-            <Title>{deck.title}</Title>
-            <Cards>{deck.questions.length} cards</Cards>
+            <Title>{decks[id].title}</Title>
+            <Cards>{decks[id].questions.length} cards</Cards>
           </DeckDetail>
-        ) : (
-          <Text>Loading</Text>
-        )}
-
-        <ButtonAction>
-          <AppButton
-            press={this.addNewCard(deck.title)}
-            backgroundColor={white}
-            borderColor={blue}
-            title="Add Card"
-          />
-          <AppButton
-            press={this.handleSubmit}
-            backgroundColor={blue}
-            borderColor={blue}
-            color={white}
-            title="Start Quiz"
-          />
-        </ButtonAction>
+          <ButtonAction>
+            <AppButton
+              press={() => this.addNewCard(decks[id].title)}
+              backgroundColor={white}
+              borderColor={blue}
+              title="Add Card"
+            />
+            <AppButton
+              press={() => this.startQuiz(decks[id])}
+              backgroundColor={blue}
+              borderColor={blue}
+              color={white}
+              title="Start Quiz"
+            />
+          </ButtonAction>
+          <Text style={{ color: red }}>{error && 'Please add at least 1 card.'}</Text>
       </Container>
     )
   }
 }
 
-export default SoloDeckView
+const mapStateToProps = decks => ({ decks })
+
+export default connect(mapStateToProps, null)(SoloDeckView)

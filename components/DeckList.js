@@ -2,9 +2,9 @@ import React, { Component } from 'react'
 import { View, Text, FlatList, TouchableHighlight } from 'react-native'
 import styled from 'styled-components/native'
 import { connect } from 'react-redux'
-import { getAllDeck } from '../actions/index'
+import { fetchAllDeck } from '../actions/index'
 import { white, blue, gray } from '../helpers/colors'
-import { getDecks, clearAll } from '../utils/api'
+import { setLocalNotification } from '../helpers/helpers'
 
 const DeckWrapper = styled.TouchableHighlight`
   background-color: ${white};
@@ -61,17 +61,8 @@ function Deck({ title, questions, press }) {
 
 class DeckListView extends Component {
   componentDidMount(){
-    this.fetchDeckList()
-  }
-
-  fetchDeckList = () => {
-    getDecks().then(res => {
-      const deckList = JSON.parse(res)
-      const deckArray = []
-      if (deckList !== null) {
-        this.props.getAllDeck(deckList)
-      }
-    })
+    setLocalNotification()
+    this.props.fetchAllDeck()
   }
 
   selectDeck = (title) => {
@@ -97,10 +88,10 @@ class DeckListView extends Component {
   }
 }
 
-function mapStateToProps(decks) {
+const mapStateToProps = decks => {
   return {
     decks: Object.values(decks).map(deck => deck)
   }
 }
 
-export default connect(mapStateToProps, { getAllDeck })(DeckListView)
+export default connect(mapStateToProps, { fetchAllDeck })(DeckListView)
