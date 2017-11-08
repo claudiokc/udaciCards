@@ -175,6 +175,7 @@ class QuizView extends Component {
             questions={deck.questions}
             onCorrectAnswered={this.correctAnswered}
             onIncorrectAnswered={this.incorrectAnswered}
+            onShowAnswer={this.onShowAnswer}
             {...this.state}
           />
         ) : (
