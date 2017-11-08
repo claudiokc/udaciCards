@@ -12,13 +12,19 @@ const Tabs = TabNavigator(
     DeckList: {
       screen: DeckListView,
       navigationOptions: {
-        tabBarLabel: 'Decks'
+        tabBarLabel: 'Decks',
+        tabBarIcon:({ blue }) => (
+          <FontAwesome name="sticky-note-o" size={30} color={blue} />
+        )
       }
     },
     AddDeck: {
       screen: AddDeckView,
       navigationOptions: {
-        tabBarLabel: 'Add Deck'
+        tabBarLabel: 'Add Deck',
+        tabBarIcon:({ blue }) => (
+          <FontAwesome name="calendar-plus-o " size={30} color={blue} />
+        )
       }
     }
   },
