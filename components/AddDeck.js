@@ -13,6 +13,7 @@ import { saveDeckTitle } from '../utils/api'
 import { NavigationActions } from 'react-navigation'
 import { connect } from 'react-redux'
 import { createNewTitle, createDeck } from '../actions'
+import AppButton from './AppButton'
 
 const DeckView = styled.View`padding: 30px 20px;`
 
@@ -37,10 +38,9 @@ const Header = styled.Text`
   padding-vertical: 12;
   margin-bottom: 10;
 `
-const ButtonText = styled.Text`
-  font-size: 36;
-  text-align: center;
-  margin-bottom: 40;
+const ButtonView = styled.View`
+  align-items: center;
+  margin-top: 20;
 `
 const Button = styled.View`
   width: 100%;
@@ -89,7 +89,7 @@ class AddDeckView extends Component {
   toDeck = title => {
     this.props.navigation.dispatch(
       NavigationActions.navigate({
-        routeName: 'IndividualDeckView',
+        routeName: 'SoloDeckView',
         params: { id: title }
       })
     )
@@ -98,7 +98,7 @@ class AddDeckView extends Component {
   render() {
     const {title, error, duplicate} = this.state
     return (
-      <Wrapper>
+      <Wrapper behavior="padding">
          <DeckView>
            <Header>What is the title of your new deck?</Header>
            <Input
@@ -114,14 +114,15 @@ class AddDeckView extends Component {
               {error && 'Please fill in the deck title'}
               {duplicate && 'Title already exists'}
             </ErrorText>
-            <View>
-              <TouchableHighlight
-                onPress={this.handleSubmit}>
-                <Button>
-                  <ButtonText>Create Deck</ButtonText>
-                </Button>
-              </TouchableHighlight>
-            </View>
+            <ButtonView>
+              <AppButton
+                press={this.handleSubmit}
+                backgroundColor={blue}
+                borderColor={blue}
+                color={white}
+                title="Create Deck"
+              />
+            </ButtonView>
          </DeckView>
        </Wrapper>
     )
