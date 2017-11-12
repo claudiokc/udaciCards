@@ -6,19 +6,6 @@ import { fetchAllDeck } from '../actions/index'
 import { white, blue, gray } from '../helpers/colors'
 import { setLocalNotification } from '../helpers/helpers'
 
-const DeckWrapper = styled.TouchableHighlight`
-  background-color: ${white};
-  height: 200px;
-  padding: 30px 20px;
-  margin-horizontal: 15;
-  margin-top: 10;
-  margin-bottom: 15;
-  border-radius: 2px;
-  elevation: 5;
-  shadow-color: blue;
-  justify-content: center;
-  align-items: center;
-`
 const Container = styled.View`
   background-color: ${white};
   height: 200;
@@ -32,6 +19,7 @@ const Container = styled.View`
   shadow-color: blue;
   justify-content: center;
   align-items: center;`
+
 
 const DeckTitle = styled.Text`
   font-size: 26px;
@@ -50,12 +38,12 @@ const Wrapper = styled.View`
 
 function Deck({ title, questions, press }) {
   return (
-    <DeckWrapper onPress={press}>
+    <TouchableHighlight onPress={press}>
       <Container>
         <DeckTitle>{title}</DeckTitle>
         <DeckCardsCount>{questions.length} cards</DeckCardsCount>
       </Container>
-    </DeckWrapper>
+    </TouchableHighlight>
   )
 }
 
